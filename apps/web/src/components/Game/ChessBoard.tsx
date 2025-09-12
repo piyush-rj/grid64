@@ -99,15 +99,15 @@ const ChessSquare: React.FC<{
             className={`
         w-18 h-18 flex items-center justify-center cursor-pointer relative
         ${isLight ? 'bg-[#232E3B]' : 'bg-[#3a5f76]'}
-        ${isSelected ? 'ring-2 ring-blue-500 ring-inset' : ''}
-        ${isValidMove ? 'ring-2 ring-green-500 ring-inset' : ''}
+        ${isSelected ? 'ring-2 ring-[#aaa9e0] ring-inset' : ''}
+        ${isValidMove ? 'ring-2 ring-[#7675BE] ring-inset' : ''}
         hover:brightness-110
       `}
             onClick={onClick}
         >
             {piece && <PieceComponent piece={piece} />}
             {isValidMove && !piece && (
-                <div className="w-3 h-3 bg-green-500 rounded-full opacity-70"></div>
+                <div className="w-3 h-3 bg-[#7675BE] rounded-full opacity-70"></div>
             )}
         </div>
     );
@@ -155,7 +155,6 @@ export const ChessBoard: React.FC = () => {
                             <ChessSquare
                                 key={`${rowIndex}-${colIndex}`}
                                 piece={piece}
-                                position={actualPosition}
                                 isLight={isLight}
                                 isSelected={isSelected!}
                                 isValidMove={isValidMove}

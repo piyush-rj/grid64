@@ -19,7 +19,7 @@ export const ChatBox: React.FC = () => {
         <div className="flex flex-col bg-neutral-900 rounded-lg p-4 shadow-sm border border-neutral-700 h-full">
             <h3 className="text-lg font-semibold mb-4 border-b border-neutral-700 pb-2">Chat</h3>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar mb-4 bg-neutral-900 rounded p-2 space-y-1 min-h-[300px]">
+            <div className="flex-1 overflow-y-auto custom-scrollbar mb-4 bg-neutral-900 rounded p-2 space-y-1 min-h-[400px] max-h-[400px]">
                 {messages.length === 0 ? (
                     <p className="text-gray-500 text-sm">No messages yet...</p>
                 ) : (
@@ -41,7 +41,7 @@ export const ChatBox: React.FC = () => {
                     value={chatMessage}
                     onChange={(e) => setChatMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="flex-1 px-3 py-2 border border-neutral-600 bg-neutral-950 rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-700 text-sm"
                     maxLength={200}
                 />
                 <button

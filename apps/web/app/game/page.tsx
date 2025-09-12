@@ -5,6 +5,14 @@ import { GameInfo } from '@/src/components/Game/GameInfo';
 import { ChatBox } from '@/src/components/Game/ChatBox';
 import { MoveHistory } from '@/src/components/Game/MoveHistory';
 import React from 'react';
+import GameFooterProfile from '@/src/components/Game/GameProfile';
+import { cn } from '@/lib/utils';
+import { Roboto } from 'next/font/google';
+
+const roboto = Roboto({
+    subsets: ["latin"],
+    weight: ["300", "400", "500", "700"],
+});
 
 export const ChessApp: React.FC = () => {
     return (
@@ -12,6 +20,7 @@ export const ChessApp: React.FC = () => {
             <div className="max-w-7xl mx-auto w-full flex flex-row gap-8 justify-center items-start">
 
                 <div className="flex flex-col gap-6 w-72">
+                    <GameInfo />
                     <MoveHistory />
                     <CapturedPieces />
                     <GameControls />
@@ -23,11 +32,14 @@ export const ChessApp: React.FC = () => {
 
                 <div className="flex flex-col w-80 space-y-3">
                     <ChatBox />
-                    <GameInfo />
                 </div>
             </div>
 
-            <div className='absolute bottom-6 left-6 text-neutral-200 text-xl tracking-wider'>
+            <div className="absolute top-3 right-4">
+                <GameFooterProfile />
+            </div>
+
+            <div className='absolute bottom-6 left-6 text-neutral-200 text-[22px] tracking-wider'>
                 <span>Grid</span><span className='text-[#7675BE]'>64</span>
             </div>
         </div>

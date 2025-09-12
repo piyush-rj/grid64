@@ -23,7 +23,7 @@ export default function HomeFooter() {
         <div className="px-3 py-2 flex border border-neutral-700 rounded-2xl items-center gap-x-4">
             <span
                 onClick={handleClick}
-                className={`h-8 w-8 rounded-md overflow-hidden relative cursor-pointer 
+                className={`h-10 w-10 rounded-md overflow-hidden relative cursor-pointer 
           transition-transform duration-150 ${isPressed ? 'scale-90' : 'scale-100'}`}
             >
                 <Image
@@ -33,20 +33,20 @@ export default function HomeFooter() {
                     className="object-cover"
                 />
             </span>
-            <span className="h-8 w-8 rounded-md flex justify-center items-center hover:bg-neutral-900 transition-colors transform duration-200 cursor-pointer">
+            <span className="h-9 w-9 rounded-md flex justify-center items-center hover:bg-neutral-900 transition-colors transform duration-200 cursor-pointer">
                 <a
                     href="https://github.com/piyush-rj/chess"
                     target="_blank"
                 >
-                    <GitHubSVG />
+                    <GitHubSVG className="size-8 text-neutral-300"/>
                 </a>
             </span>
-            <span className="h-8 w-8 rounded-md flex justify-center items-center hover:bg-neutral-900 transition-colors transform duration-200 cursor-pointer">
+            <span className="h-9 w-9 rounded-md flex justify-center items-center hover:bg-neutral-900 transition-colors transform duration-200 cursor-pointer">
                 <a
                     href="https://x.com/PiyushC2P"
                     target="_blank"
                 >
-                    <TwitterSVG />
+                    <TwitterSVG className="size-8 text-neutral-300"/>
                 </a>
             </span>
         </div>

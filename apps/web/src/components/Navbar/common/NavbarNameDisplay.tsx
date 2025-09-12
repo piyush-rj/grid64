@@ -65,7 +65,7 @@ export default function NavbarNameDisplay() {
                     <NameCard />
 
                     {session.user.image && (
-                        <span className="h-8 w-8 rounded-full overflow-hidden relative shadow-lg">
+                        <span className="h-9 w-9 rounded-full overflow-hidden relative shadow-lg">
                             <Image
                                 src={session.user.image!}
                                 alt="User Avatar"

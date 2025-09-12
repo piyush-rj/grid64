@@ -25,7 +25,7 @@ export default function NameCard() {
         <div
             className={cn(
                 schoolBell.className,
-                "flex justify-center items-center text-[22px] text-[#e7e7e7] font-light tracking-"
+                "flex justify-center items-center text-[23px] text-[#e7e7e7] font-light tracking-"
             )}
         >
             hey, king

@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-// @ts-expect-error
 import { motion } from "motion/react";
 
 type SpotlightProps = {

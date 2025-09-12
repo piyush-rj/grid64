@@ -15,7 +15,7 @@ export default function HomeFooterPieces() {
     ];
 
     return (
-        <div className="px-3 py-2 flex border border-neutral-700 rounded-2xl items-center gap-x-4 relative">
+        <div className="px-4 py-2.5 flex border border-neutral-700 rounded-2xl items-center gap-x-4.5 relative">
             {allIcons.map(({ Icon, text }, index) => (
                 <div
                     key={index}
@@ -23,7 +23,7 @@ export default function HomeFooterPieces() {
                     onMouseEnter={() => setHoverIndex(index)}
                     onMouseLeave={() => setHoverIndex(null)}
                 >
-                    <Icon />
+                    <Icon className="size-9"/>
 
                     {hoverIndex === index && (
                         <div className="absolute bottom-10 mb-2 left-1/2 -translate-x-1/2 w-48 p-3 rounded-lg bg-neutral-950 border border-neutral-800 text-sm text-[#adade9] shadow-lg z-10 tracking-wider">
