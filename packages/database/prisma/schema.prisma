@@ -31,7 +31,7 @@ model User {
 }
 
 model Game {
-  id          String     @id @default(cuid())
+  id          String     @id
   status      GameStatus @default(WAITING)
   currentTurn Color      @default(WHITE)
   winner      Color?

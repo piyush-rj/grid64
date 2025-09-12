@@ -180,7 +180,7 @@ export class GameManager {
         return await this.redisCache.getPlayerGame(playerId);
     }
 
-    async removePlayerFromGame(playerId: string, gameId?: string): Promise<void> {
+    public async removePlayerFromGame(playerId: string, gameId?: string): Promise<void> {
         const targetGameId = gameId || this.playerGameMap.get(playerId);
         if (!targetGameId) return;
 

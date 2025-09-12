@@ -261,23 +261,29 @@ export class ChessWebSocketServer {
     }
 
     private async handleLeaveGame(ws: AuthenticatedWebSocket): Promise<void> {
-        if (!ws.gameId) {
-            return;
-        }
+        if (!ws.gameId) return;
 
         try {
-            await this.gameManager.removePlayerFromGame(ws.playerId!, ws.gameId);
-            this.broadcastToGame(ws.gameId, {
+            const gameId = ws.gameId;
+            await this.gameManager.removePlayerFromGame(ws.playerId!, gameId);
+
+            this.broadcastToGame(gameId, {
                 type: WebSocketMessageType.PLAYER_LEFT,
                 data: { playerId: ws.playerId }
             }, ws.playerId);
 
-            this.removeClientFromGame(ws.gameId, ws.playerId!);
+            this.sendMessage(ws, {
+                type: WebSocketMessageType.PLAYER_LEFT,
+                data: { gameId, playerId: ws.playerId }
+            });
+
+            this.removeClientFromGame(gameId, ws.playerId!);
             ws.gameId = '';
         } catch (error) {
             this.sendError(ws, 'Failed to leave game');
         }
     }
+
 
     private async handleChatMessage(ws: AuthenticatedWebSocket, message: string): Promise<void> {
         if (!ws.gameId) {

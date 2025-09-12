@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { JWT } from "next-auth/jwt";
 
 export interface UserType {
-    id?: string | null;
+    id?: string;
     name?: string | null;
     email?: string | null;
     image?: string | null;
