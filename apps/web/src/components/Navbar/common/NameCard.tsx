@@ -2,7 +2,6 @@
 
 import { cn } from "@/src/lib/utils";
 import { useUserSessionStore } from "@/src/store/useUserSessionStore";
-import { Roboto } from "next/font/google";
 import { Schoolbell } from 'next/font/google'
 
 
@@ -10,11 +9,6 @@ const schoolBell = Schoolbell({
     subsets: ['latin'],
     weight: ['400']
 })
-
-const roboto = Roboto({
-    subsets: ["latin"],
-    weight: ["300", "400", "500", "700"],
-});
 
 export default function NameCard() {
     const { session } = useUserSessionStore();

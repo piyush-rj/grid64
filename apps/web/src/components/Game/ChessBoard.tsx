@@ -4,7 +4,7 @@ import { Position, SerializedPiece } from '@/src/store/useChessGameStore';
 import React from 'react';
 
 const KingSVG = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
         <path stroke="none" d="M0 0h24v24H0z" fill='none' />
         <path d="M8 16l-1.447 .724a1 1 0 0 0 -.553 .894v2.382h12v-2.382a1 1 0 0 0 -.553 -.894l-1.447 -.724h-8z" />
         <path d="M8.5 16a3.5 3.5 0 1 1 3.163 -5h.674a3.5 3.5 0 1 1 3.163 5z" />
@@ -14,7 +14,7 @@ const KingSVG = ({ className }: { className?: string }) => (
 );
 
 const QueenSVG = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
         <path stroke="none" d="M0 0h24v24H0z" fill='none'  />
         <path d="M16 16l2 -11l-4 4l-2 -5l-2 5l-4 -4l2 11" />
         <path d="M8 16l-1.447 .724a1 1 0 0 0 -.553 .894v2.382h12v-2.382a1 1 0 0 0 -.553 -.894l-1.447 -.724h-8z" />
@@ -25,7 +25,7 @@ const QueenSVG = ({ className }: { className?: string }) => (
 );
 
 const RookSVG = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
         <path stroke="none" d="M0 0h24v24H0z" fill='none'  />
         <path d="M8 16l-1.447 .724a1 1 0 0 0 -.553 .894v2.382h12v-2.382a1 1 0 0 0 -.553 -.894l-1.447 -.724h-8z" />
         <path d="M8 16l1 -9h6l1 9" />
@@ -36,7 +36,7 @@ const RookSVG = ({ className }: { className?: string }) => (
 );
 
 const BishopSVG = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
         <path stroke="none" d="M0 0h24v24H0z" fill='none'  />
         <path d="M8 16l-1.447 .724a1 1 0 0 0 -.553 .894v2.382h12v-2.382a1 1 0 0 0 -.553 -.894l-1.447 -.724h-8z" />
         <path d="M12 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
@@ -47,7 +47,7 @@ const BishopSVG = ({ className }: { className?: string }) => (
 );
 
 const KnightSVG = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
         <path stroke="none" d="M0 0h24v24H0z" fill='none'  />
         <path d="M8 16l-1.447 .724a1 1 0 0 0 -.553 .894v2.382h12v-2.382a1 1 0 0 0 -.553 -.894l-1.447 -.724h-8z" />
         <path d="M9 3l1 3l-3.491 2.148a1 1 0 0 0 .524 1.852h2.967l-2.073 6h7.961l.112 -5c0 -3 -1.09 -5.983 -4 -7c-1.94 -.678 -2.94 -1.011 -3 -1z" />
@@ -55,7 +55,7 @@ const KnightSVG = ({ className }: { className?: string }) => (
 );
 
 const PawnSVG = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"  stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
         <path stroke="none" d="M0 0h24v24H0z" fill='none'  />
         <path d="M12 3a3 3 0 0 1 3 3c0 1.113 -.6 2.482 -1.5 3l1.5 7h-6l1.5 -7c-.9 -.518 -1.5 -1.887 -1.5 -3a3 3 0 0 1 3 -3z" />
         <path d="M8 9h8" />
@@ -79,7 +79,7 @@ const PieceComponent: React.FC<{ piece: SerializedPiece }> = ({ piece }) => {
     return (
         <div
             className={
-                `w-8 h-8 flex items-center justify-center
+                `w-10 h-10 flex items-center justify-center
         ${piece?.color === "WHITE" ? "text-neutral-950 fill-neutral-300 drop-shadow-xl size-10" : "text-[#bdbdbd] fill-black size-10 drop-shadow-xl"}
         `}>
             {getPieceIcon()}
@@ -89,16 +89,15 @@ const PieceComponent: React.FC<{ piece: SerializedPiece }> = ({ piece }) => {
 
 const ChessSquare: React.FC<{
     piece: SerializedPiece | null;
-    position: Position;
     isLight: boolean;
     isSelected: boolean;
     isValidMove: boolean;
     onClick: () => void;
-}> = ({ piece, position, isLight, isSelected, isValidMove, onClick }) => {
+}> = ({ piece, isLight, isSelected, isValidMove, onClick }) => {
     return (
         <div
             className={`
-        w-12 h-12 flex items-center justify-center cursor-pointer relative
+        w-18 h-18 flex items-center justify-center cursor-pointer relative
         ${isLight ? 'bg-[#232E3B]' : 'bg-[#3a5f76]'}
         ${isSelected ? 'ring-2 ring-blue-500 ring-inset' : ''}
         ${isValidMove ? 'ring-2 ring-green-500 ring-inset' : ''}
@@ -119,8 +118,8 @@ export const ChessBoard: React.FC = () => {
 
     if (!gameState) {
         return (
-            <div className="w-96 h-96 bg-gray-200 flex items-center justify-center rounded-lg">
-                <p className="text-gray-600">No game loaded</p>
+            <div className="w-100 h-100 bg-neutral-900 border border-neutral-700 flex items-center justify-center rounded-lg">
+                <p className="text-neutral-300">Create OR Join a game</p>
             </div>
         );
     }
@@ -143,8 +142,8 @@ export const ChessBoard: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center">
-            <div className="grid grid-cols-8 gap-0 border-2 border-amber-900 rounded-lg overflow-hidden">
+        <div className="flex flex-col items-center ">
+            <div className="grid grid-cols-8 gap-0 border-2 border-neutral-700 rounded-lg overflow-hidden">
                 {boardToRender.map((row, rowIndex) =>
                     row.map((piece, colIndex) => {
                         const actualPosition = getActualPosition(rowIndex, colIndex);
@@ -167,14 +166,14 @@ export const ChessBoard: React.FC = () => {
                 )}
             </div>
 
-            <div className="mt-4 text-center">
-                <p className="text-sm text-gray-600">
+            <div className="mt-4 text-center flex space-x-6 tracking-wide">
+                <p className="text-sm text-neutral-400">
                     Playing as: <span className="font-semibold">{playerColor || 'Observer'}</span>
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-neutral-400">
                     Current turn: <span className="font-semibold">{gameState.currentPlayer}</span>
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-neutral-400">
                     Status: <span className="font-semibold">{gameState.gameStatus}</span>
                 </p>
             </div>

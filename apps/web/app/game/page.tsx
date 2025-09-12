@@ -1,31 +1,34 @@
 import { CapturedPieces } from '@/src/components/Game/CapturedPieces';
 import { ChessBoard } from '@/src/components/Game/ChessBoard';
 import { GameControls } from '@/src/components/Game/GameControls';
+import { GameInfo } from '@/src/components/Game/GameInfo';
+import { ChatBox } from '@/src/components/Game/ChatBox';
+import { MoveHistory } from '@/src/components/Game/MoveHistory';
 import React from 'react';
 
 export const ChessApp: React.FC = () => {
-
     return (
-        <div className="min-h-screen bg-neutral-950 p-8">
-            <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold text-center mb-8 text-neutral-200">
-                    Chess Game
-                </h1>
+        <div className="min-h-screen bg-neutral-950 p-8 relative flex justify-center items-center">
+            <div className="max-w-7xl mx-auto w-full flex flex-row gap-8 justify-center items-start">
 
-                <div className="flex flex-col lg:flex-row gap-8 justify-center items-start">
-                    <div className="order-2 lg:order-1">
-                        <GameControls />
-                    </div>
-
-                    <div className="order-1 lg:order-2 flex flex-col items-center">
-                        <ChessBoard />
-                    </div>
-
-                    <div className="order-3 lg:order-3">
-                        <CapturedPieces />
-                    </div>
+                <div className="flex flex-col gap-6 w-72">
+                    <MoveHistory />
+                    <CapturedPieces />
+                    <GameControls />
                 </div>
 
+                <div className="flex flex-col items-center justify-center">
+                    <ChessBoard />
+                </div>
+
+                <div className="flex flex-col w-80 space-y-3">
+                    <ChatBox />
+                    <GameInfo />
+                </div>
+            </div>
+
+            <div className='absolute bottom-6 left-6 text-neutral-200 text-xl tracking-wider'>
+                <span>Grid</span><span className='text-[#7675BE]'>64</span>
             </div>
         </div>
     );

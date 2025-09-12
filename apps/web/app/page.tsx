@@ -2,9 +2,9 @@ import HomeFooter from "@/src/components/Base/HomeFooter";
 import HomeFooterPieces from "@/src/components/Base/HomeFooterPieces";
 import HomeHero from "@/src/components/Base/HomeHero";
 import MainNavbar from "@/src/components/Navbar/NavbarMain";
-// import { GridBackgroundDemo } from "@/src/components/ui/GridBackground";
-// import { Spotlight } from "@/src/components/ui/spotlight-new";
+import { GridBackgroundDemo } from "@/src/components/ui/GirdBackgroundDemo";
 import { cn } from "@/src/lib/utils";
+import { Spotlight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -12,11 +12,11 @@ export default function Home() {
       <MainNavbar />
 
       <div className="absolute top-0 w-full max-w-full -z-3">
-        {/* <Spotlight /> */}
+        <Spotlight />
       </div>
-      {/* <div className="absolute w-full h-full opacity-10 -z-2">
+      <div className="absolute w-full h-full opacity-10 -z-2">
         <GridBackgroundDemo />
-      </div> */}
+      </div>
 
       <div className="w-full h-full px-8 flex flex-col gap-12">
         <HomeHero />

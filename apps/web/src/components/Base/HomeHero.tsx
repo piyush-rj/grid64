@@ -4,16 +4,10 @@ import { BishopSVG, KingSVG, KnightSVG, PawnSVG, QueenSVG, RookSVG } from "@/src
 import { ChevronRight } from "lucide-react";
 import { useUserSessionStore } from "@/src/store/useUserSessionStore";
 import { useRouter } from "next/navigation";
-import { Roboto } from "next/font/google";
 import { cn } from "@/src/lib/utils";
 import { Button } from "../ui/Button";
 
 const allIcons = [KingSVG, QueenSVG, BishopSVG, KnightSVG, PawnSVG, RookSVG];
-
-const roboto = Roboto({
-    subsets: ["latin"],
-    weight: ["300", "400", "500", "700"],
-});
 
 export default function HomeHero() {
     const { session } = useUserSessionStore();
