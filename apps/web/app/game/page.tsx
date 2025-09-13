@@ -6,13 +6,6 @@ import { ChatBox } from '@/src/components/Game/ChatBox';
 import { MoveHistory } from '@/src/components/Game/MoveHistory';
 import React from 'react';
 import GameFooterProfile from '@/src/components/Game/GameProfile';
-import { cn } from '@/lib/utils';
-import { Roboto } from 'next/font/google';
-
-const roboto = Roboto({
-    subsets: ["latin"],
-    weight: ["300", "400", "500", "700"],
-});
 
 export const ChessApp: React.FC = () => {
     return (

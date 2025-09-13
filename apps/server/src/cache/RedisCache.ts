@@ -7,22 +7,11 @@ export class RedisCache {
     private subClient: Redis;
 
     constructor() {
-        this.redis = new Redis({
-            host: process.env.REDIS_HOST || 'localhost',
-            port: parseInt(process.env.REDIS_PORT || '6380'),
-            // retryDelayOnFailover: 100,
-            // maxRetriesPerRequest: 3,
-        });
+        this.redis = new Redis(process.env.REDIS_URL || 'http://localhost:6380');
 
-        this.pubClient = new Redis({
-            host: process.env.REDIS_HOST || 'localhost',
-            port: parseInt(process.env.REDIS_PORT || '6380'),
-        });
+        this.pubClient = new Redis(process.env.REDIS_URL || 'http://localhost:6380');
 
-        this.subClient = new Redis({
-            host: process.env.REDIS_HOST || 'localhost',
-            port: parseInt(process.env.REDIS_PORT || '6380'),
-        });
+        this.subClient = new Redis(process.env.REDIS_URL || 'http://localhost:6380');
     }
 
     // <--------------------------- game-state-events ---------------------------> 

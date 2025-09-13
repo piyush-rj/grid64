@@ -214,7 +214,9 @@ export class ChessWebSocketServer {
                         type: WebSocketMessageType.GAME_ENDED,
                         data: {
                             gameState: result.gameState,
-                            reason: result.gameState.gameStatus
+                            reason: result.gameState.gameStatus,
+                            winner: result.gameState.winner,
+                            looser: result.gameState.looser,
                         }
                     });
                 }

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useChessStore } from '../store/useChessGameStore';
-import { useWebSocket } from '../provider/WebSocketProvider';
+import { useWebSocket, WebSocketMessageType } from '../provider/WebSocketProvider';
 import { Position } from '../types/web-socket-types';
 
 export const useChessSocket = () => {
@@ -25,7 +25,7 @@ export const useChessSocket = () => {
         }
 
         sendMessage({
-            type: 'CREATE_GAME',
+            type: WebSocketMessageType.CREATE_GAME,
             data: {}
         });
     }, [connected, sendMessage]);
@@ -37,7 +37,7 @@ export const useChessSocket = () => {
         }
 
         sendMessage({
-            type: 'JOIN_GAME',
+            type: WebSocketMessageType.JOIN_GAME,
             data: { gameId }
         });
     }, [connected, sendMessage]);
@@ -54,7 +54,7 @@ export const useChessSocket = () => {
         }
 
         sendMessage({
-            type: 'MAKE_MOVE',
+            type: WebSocketMessageType.MAKE_MOVE,
             data: { from, to }
         });
     }, [connected, sendMessage, currentGameId]);
@@ -71,7 +71,7 @@ export const useChessSocket = () => {
         }
 
         sendMessage({
-            type: 'GET_VALID_MOVES',
+            type: WebSocketMessageType.GET_VALID_MOVES,
             data: { position }
         });
     }, [connected, sendMessage, currentGameId]);
@@ -83,7 +83,7 @@ export const useChessSocket = () => {
         }
 
         sendMessage({
-            type: 'LEAVE_GAME',
+            type: WebSocketMessageType.LEAVE_GAME,
             data: {}
         });
     }, [connected, sendMessage]);
@@ -100,7 +100,7 @@ export const useChessSocket = () => {
         }
 
         sendMessage({
-            type: 'CHAT_MESSAGE',
+            type: WebSocketMessageType.CHAT_MESSAGE,
             data: { message }
         });
     }, [connected, sendMessage, currentGameId]);
@@ -117,16 +117,15 @@ export const useChessSocket = () => {
         }
 
         sendMessage({
-            type: 'GET_GAME_STATE',
+            type: WebSocketMessageType.GET_GAME_STATE,
             data: {}
         });
     }, [connected, sendMessage, currentGameId]);
 
-    // Chess-specific helpers
+    
     const selectSquare = useCallback((position: Position) => {
         if (!gameState) return;
 
-        // If no square is selected, select this one and get valid moves
         if (!selectedSquare) {
             const piece = gameState.boardState[position.y]?.[position.x];
             if (piece && piece.color === playerColor && gameState.currentPlayer === playerColor) {
@@ -135,30 +134,27 @@ export const useChessSocket = () => {
             }
             return;
         }
-
-        // If clicking the same square, deselect it
+        
         if (selectedSquare.x === position.x && selectedSquare.y === position.y) {
             setSelectedSquare(null);
             setValidMoves([]);
             return;
         }
-
-        // If clicking a different square of own pieces, select it
+        
         const piece = gameState.boardState[position.y]?.[position.x];
         if (piece && piece.color === playerColor && gameState.currentPlayer === playerColor) {
             setSelectedSquare(position);
             getValidMoves(position);
             return;
         }
-
-        // Try to make a move
+        
         const isValidMove = validMoves.some(move => move.x === position.x && move.y === position.y);
         if (isValidMove) {
             makeMove(selectedSquare, position);
             setSelectedSquare(null);
             setValidMoves([]);
         } else {
-            // Invalid move, deselect
+            
             setSelectedSquare(null);
             setValidMoves([]);
         }
@@ -177,19 +173,14 @@ export const useChessSocket = () => {
     }, [gameState, playerColor]);
 
     return {
-        // Connection state
         connected,
-        connecting,
-
-        // Game state
+        connecting,        
         gameState,
         currentGameId,
         playerColor,
         validMoves,
         selectedSquare,
         messages,
-
-        // Basic actions
         createGame,
         joinGame,
         makeMove,
@@ -197,8 +188,6 @@ export const useChessSocket = () => {
         leaveGame,
         sendChatMessage,
         getGameState,
-
-        // Chess-specific helpers
         selectSquare,
         isSquareSelected,
         isValidMoveSquare,

@@ -33,7 +33,7 @@ export default function HomeHero() {
                         Losing is not an option
                     </span>
                     <span className="text-[74px]">
-                        Don't just Play.{" "}
+                        {'Don\'t just Play. '}
                         <span className="text-[#B8B7E4]"> Dominate.</span>
                     </span>
                     <span className="flex w-full justify-center gap-x-4">

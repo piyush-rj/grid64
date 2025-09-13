@@ -67,6 +67,8 @@ export interface GameState {
     timeControl?: string;
     startedAt?: Date;
     updatedAt?: Date;
+    winner?: string | null,
+    looser?: string | null;
 }
 
 export enum WebSocketMessageType {
@@ -199,7 +201,7 @@ export interface GameEndedResponse {
     data: {
         gameState: GameState;
         reason: GameStatusEnum;
-        winner?: Color;
+        winner?: string | null;
     };
 }
 
@@ -243,7 +245,8 @@ export interface MoveData {
 export interface GameEndData {
     gameId: string;
     status: GameStatusEnum;
-    winner: Color | null;
+    winner?: string | null;
+    looser?: string | null,
 }
 
 export interface RateLimitConfig {

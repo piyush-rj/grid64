@@ -46,7 +46,6 @@ export class GameManager {
     }
 
     public async joinGame(playerId: string, gameId: string): Promise<{ success: boolean; gameState?: GameState; error?: string }> {
-        // FIXED: Get existing game for this player, not for this gameId
         const existingGameId = this.playerGameMap.get(playerId);
         if (existingGameId && existingGameId !== gameId) {
             await this.removePlayerFromGame(playerId, existingGameId);
@@ -69,7 +68,6 @@ export class GameManager {
             const playerResult = game?.add_player(playerId);
             this.games.set(gameId, game!);
 
-            // FIXED: Map playerId to gameId
             this.playerGameMap.set(playerId, gameId);
 
             await this.redisCache.setGameState(gameId, game?.get_game_state()!);
@@ -129,23 +127,20 @@ export class GameManager {
             this.databaseQueue.queueGameEnd({
                 gameId,
                 status: updatedGameState.gameStatus,
-                winner: updatedGameState.gameStatus === GameStatusEnum.CHECKMATE ? (updatedGameState.currentPlayer === 'WHITE' ? 'BLACK' : 'WHITE') : null,
+                winner: updatedGameState.winner ?? null,
             });
         }
 
         return {
             success: true,
             move: moveResult.move,
-            // FIXED: Return the full gameState, not just the status
             gameState: updatedGameState,
         };
     }
 
     public async getValidMoves(playerId: string, gameId: string, position: Position): Promise<Position[] | undefined> {
         let game = this.games.get(gameId);
-        // FIXED: Check if game exists, not gameId
         if (!game) {
-            // FIXED: Add await
             const cachedState = await this.redisCache.getGameState(gameId);
             if (cachedState) {
                 game = this.restoreGameFromCache(gameId, cachedState);

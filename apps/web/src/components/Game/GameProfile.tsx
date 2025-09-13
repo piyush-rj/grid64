@@ -21,22 +21,6 @@ export default function GameFooterProfile() {
     const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
-
-    if (!session) return;
-
-    const allImages = [session.user?.image, '/images/dazai.jpeg', '/images/Gojo.jpeg', '/images/tanjiro.jpeg'];
-
-    function handleClick() {
-        setIsPressed(true);
-        console.log("session image is", session?.user?.image);
-
-        setTimeout(() => {
-            setIsPressed(false);
-            setCurrentImage((prev) => (prev + 1) % allImages.length);
-        }, 100);
-    };
-
-
     useEffect(() => {
         if (!panelRef.current) return;
         if (panel) {
@@ -58,10 +42,25 @@ export default function GameFooterProfile() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+
+    if (!session) return;
+    const allImages = [session.user?.image, '/images/dazai.jpeg', '/images/Gojo.jpeg', '/images/tanjiro.jpeg'];
+
+    function handleClick() {
+        setIsPressed(true);
+        console.log("session image is", session?.user?.image);
+
+        setTimeout(() => {
+            setIsPressed(false);
+            setCurrentImage((prev) => (prev + 1) % allImages.length);
+        }, 100);
+    };
+
     function handleLogoutClick() {
         setPanel(false);
         setShowLogoutModal(true);
     }
+
 
     return (
         <div className="px-3 py-2 flex rounded-xl items-center gap-x-4">

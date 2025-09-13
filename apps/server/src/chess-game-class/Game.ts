@@ -10,13 +10,14 @@ export class Game {
     private currentPlayer: Color = 'WHITE';
     private gameStatus: GameStatusEnum = GameStatusEnum.WAITING;
     private capturedPieces: { piece: PieceTypeEnum; capturedColor: Color }[] = [];
+    private winner: string | null = null;
+    private looser: string | null = null;
 
     constructor(public readonly gameId: string) {
         this.board = new Board();
     }
 
     public add_player(playerId: string): PlayerResult {
-        // FIXED: Changed WHTIE to WHITE
         if (!this.players.WHITE) {
             this.players.WHITE = playerId;
             return {
@@ -61,6 +62,8 @@ export class Game {
             blackPlayer: this.players.BLACK!,
             moveHistory: this.moveHistory,
             capturedPieces: this.capturedPieces,
+            winner: this.winner,
+            looser: this.looser,
         };
     }
 
@@ -71,6 +74,8 @@ export class Game {
             this.currentPlayer = cached?.currentPlayer || 'WHITE';
             this.gameStatus = cached?.gameStatus || GameStatusEnum.WAITING;
             this.moveHistory = moves || [];
+            this.winner = cached?.winner || null;
+            this.looser = cached?.looser || null;
 
             if (cached?.boardState) {
                 this.restore_board_from_state(cached.boardState);
@@ -83,6 +88,8 @@ export class Game {
             this.moveHistory = moves || [];
             this.currentPlayer = 'WHITE';
             this.gameStatus = GameStatusEnum.WAITING;
+            this.winner = null;
+            this.looser = null;
         }
     }
 
@@ -149,18 +156,26 @@ export class Game {
     }
 
     private update_game_status() {
-        const opponentColor: Color = this.currentPlayer === 'WHITE' ? 'BLACK' : 'WHITE';
-        const hasMoves = this.has_possible_moves(opponentColor);
-        const kingInCheck = this.is_king_in_check(opponentColor);
+        // const opponentColor: Color = this.currentPlayer === 'WHITE' ? 'BLACK' : 'WHITE';
+        const hasMoves = this.has_possible_moves(this.currentPlayer);
+        const kingInCheck = this.is_king_in_check(this.currentPlayer);
 
         if (kingInCheck && !hasMoves) {
             this.gameStatus = GameStatusEnum.CHECKMATE;
+            this.winner = (this.currentPlayer === 'WHITE' ? this.players.BLACK : this.players.WHITE) || null;
+            this.looser = (this.currentPlayer === 'WHITE' ? this.players.WHITE : this.players.BLACK) || null;
         } else if (!kingInCheck && !hasMoves) {
             this.gameStatus = GameStatusEnum.STALEMATE;
+            this.winner = null;
+            this.looser = null;
         } else if (kingInCheck) {
             this.gameStatus = GameStatusEnum.CHECK;
+            this.winner = null;
+            this.looser = null;
         } else {
             this.gameStatus = GameStatusEnum.ACTIVE;
+            this.winner = null;
+            this.looser = null;
         };
     }
 

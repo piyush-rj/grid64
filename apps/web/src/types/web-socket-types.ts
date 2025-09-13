@@ -9,7 +9,7 @@ export interface Position {
 export interface SerializedPiece {
     type: PieceType;
     color: Color;
-    hasMoved: boolean;
+    has_moved: boolean; 
 }
 
 export interface Move {
@@ -17,44 +17,78 @@ export interface Move {
     to: Position;
     piece: PieceType;
     captured?: PieceType;
-    moveNumber?: number;
+    moveNumber: number; 
     isCheck?: boolean;
     isCheckmate?: boolean;
     isCastle?: boolean;
     isEnPassant?: boolean;
     promotion?: PieceType;
     algebraicNotation?: string;
+    timeSpent?: number; 
 }
 
 export interface GameState {
     gameId: string;
     boardState: (SerializedPiece | null)[][];
     currentPlayer: Color;
-    gameStatus: string;
+    gameStatus: string; 
     whitePlayer: string | null;
     blackPlayer: string | null;
     moveHistory: Move[];
     capturedPieces?: { piece: PieceType; capturedColor: Color }[];
     timeControl?: string;
+    startedAt?: Date;
+    updatedAt?: Date;
+    winner?: string | null;
+    looser?: string | null; 
 }
 
-export enum IncomingMessageType {
-    CONNECTION_ESTABLISHED = 'CONNECTION_ESTABLISHED',
-    GAME_CREATED = 'GAME_CREATED',
-    GAME_JOINED = 'GAME_JOINED',
-    PLAYER_JOINED = 'PLAYER_JOINED',
-    MOVE_MADE = 'MOVE_MADE',
-    GAME_STATE = 'GAME_STATE',
-    GAME_ENDED = 'GAME_ENDED',
-    INVALID_MOVE = 'INVALID_MOVE',
-    MOVE_FAILED = 'MOVE_FAILED',
-    GAME_RESTORED = 'GAME_RESTORED',
+export interface ChatMessage {
+    playerId: string;
+    message: string;
+    timestamp: number;
 }
 
-export enum WebSocketSendMessage {
-    CREATE_GAME = 'CREATE_GAME',
-    JOIN_GAME = 'JOIN_GAME',
-    LEAVE_GAME = 'LEAVE_GAME',
-    MAKE_MOVE = 'MAKE_MOVE',
-    RESIGN_GAME = 'RESIGN_GAME',
+export enum GameStatus {
+    WAITING = 'WAITING',
+    ACTIVE = 'ACTIVE',
+    CHECK = 'CHECK',
+    CHECKMATE = 'CHECKMATE',
+    STALEMATE = 'STALEMATE',
+    DRAW = 'DRAW',
+    ABANDONED = 'ABANDONED'
+}
+
+export interface CreateGameData {
+    timeControl?: string;
+    isRanked?: boolean;
+}
+
+export interface JoinGameData {
+    gameId: string;
+}
+
+export interface MakeMoveData {
+    from: Position;
+    to: Position;
+}
+
+export interface GetValidMovesData {
+    position: Position;
+}
+
+export interface ChatMessageData {
+    message: string;
+}
+
+export interface User {
+    id: string;
+    username?: string;
+    email?: string;
+}
+
+export interface UserSession {
+    user: User;
+    token?: string;
+    expiresAt?: Date;
 }

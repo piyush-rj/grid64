@@ -88,7 +88,7 @@ export class DatabaseQueue {
         this.addToQueue('MOVE', data);
     }
 
-    public queueGameEnd(data: { gameId: string, status: GameStatusEnum, winner: Color | null }): void {
+    public queueGameEnd(data: { gameId: string, status: GameStatusEnum, winner: string | null }): void {
         this.addToQueue('GAME_END', data);
     }
 
