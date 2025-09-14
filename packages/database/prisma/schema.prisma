@@ -37,9 +37,12 @@ model Game {
   winner      Color?
 
   whitePlayerId String?
-  blackPlayerId String?
   whitePlayer   User?   @relation("WhitePlayer", fields: [whitePlayerId], references: [id])
+  whiteGuestId  String?
+
+  blackPlayerId String?
   blackPlayer   User?   @relation("BlackPlayer", fields: [blackPlayerId], references: [id])
+  blackGuestId String?
 
   boardState     Json?
   moves          Move[]

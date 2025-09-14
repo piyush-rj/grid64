@@ -26,7 +26,7 @@ export default function Home() {
         <HomeFooter />
       </div>
 
-      <div className="absolute bottom-5 left-52 z-5">
+      <div className="hidden md:block absolute bottom-5 left-52 z-5">
         <HomeFooterPieces />
       </div>
     </div>

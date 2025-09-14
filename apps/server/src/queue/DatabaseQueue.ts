@@ -9,6 +9,12 @@ interface QueueProps {
     timestamp: number,
 }
 
+// interface GuestPlayerData {
+//     tempId: string;
+//     displayName?: string;
+//     createdAt: Date;
+// }
+
 export class DatabaseQueue {
     private queue: QueueProps[] = [];
     private processing: boolean = false;
@@ -25,7 +31,7 @@ export class DatabaseQueue {
             if (!this.processing && this.queue.length > 0) {
                 this.processQueue();
             }
-        }, 1000); //every 1 sec
+        }, 1000);
     }
 
     public async processQueue(): Promise<void> {
@@ -74,9 +80,7 @@ export class DatabaseQueue {
         this.queue.push(item);
     }
 
-    // <--------------------------- queue-events ---------------------------> 
-
-    public queueGameCreation(data: { gameId: string; playerId?: string; color: Color; }): void {
+    public queueGameCreation(data: { gameId: string; playerId: string; color: Color; }): void {
         this.addToQueue('GAME_CREATION', data);
     }
 
@@ -96,7 +100,6 @@ export class DatabaseQueue {
         this.addToQueue('GAME_UPDATE', data);
     }
 
-    // FIXED: Parameter type corrected
     public queueGameDeletion(gameId: string): void {
         this.addToQueue('GAME_DELETION', gameId);
     }
@@ -126,27 +129,44 @@ export class DatabaseQueue {
         }
     }
 
-    // <--------------------------- db-operations ---------------------------> 
-
     private async handleGameCreation(data: { gameId: string, playerId: string, color: Color }): Promise<void> {
         try {
-            console.log('Attempting to create game in database:', data);
+            console.log('Creating game in database:', data);
+
+            const isGuest = data.playerId.startsWith('guest_');
+
+            let gameData: any = {
+                id: data.gameId,
+                status: 'WAITING',
+                currentTurn: 'WHITE',
+                whitePlayerId: null,
+                blackPlayerId: null,
+                whiteGuestId: null,
+                blackGuestId: null,
+            };
+
+            if (isGuest) {
+                if (data.color === 'WHITE') {
+                    gameData.whiteGuestId = data.playerId;
+                } else {
+                    gameData.blackGuestId = data.playerId;
+                }
+            } else {
+                if (data.color === 'WHITE') {
+                    gameData.whitePlayerId = data.playerId;
+                } else {
+                    gameData.blackPlayerId = data.playerId;
+                }
+            }
 
             const result = await prisma.game.create({
-                data: {
-                    id: data.gameId,
-                    status: 'WAITING',
-                    currentTurn: 'WHITE',
-                    whitePlayerId: data.color === 'WHITE' ? data.playerId : null,
-                    blackPlayerId: data.color === 'BLACK' ? data.playerId : null,
-                }
+                data: gameData
             });
 
             console.log('Game created successfully in database:', result);
         } catch (error) {
             console.error('Database error in handleGameCreation:', error);
 
-            // Log specific Prisma errors
             if (error instanceof Error) {
                 console.error('Error message:', error.message);
                 console.error('Error stack:', error.stack);
@@ -160,15 +180,25 @@ export class DatabaseQueue {
         try {
             console.log('Attempting to update game for player join:', data);
 
+            const isGuest = data.playerId.startsWith('guest_');
+
             const updateData: any = {
                 status: 'ACTIVE',
                 startedAt: new Date(),
             };
 
-            if (data.color === 'WHITE') {
-                updateData.whitePlayerId = data.playerId;
-            } else if (data.color === 'BLACK') {
-                updateData.blackPlayerId = data.playerId;
+            if (isGuest) {
+                if (data.color === 'WHITE') {
+                    updateData.whiteGuestId = data.playerId;
+                } else {
+                    updateData.blackGuestId = data.playerId;
+                }
+            } else {
+                if (data.color === 'WHITE') {
+                    updateData.whitePlayerId = data.playerId;
+                } else {
+                    updateData.blackPlayerId = data.playerId;
+                }
             }
 
             const result = await prisma.game.update({
@@ -184,7 +214,7 @@ export class DatabaseQueue {
     }
 
     private async handleMakeMove(data: { gameId: string, playerId: string, move: Move }): Promise<void> {
-        console.log('inside handle move');
+        console.log('Inside handle move');
         const move = data.move;
 
         await prisma.move.create({
@@ -194,7 +224,6 @@ export class DatabaseQueue {
                 moveNumber: move.moveNumber,
                 fromX: move.from.x,
                 fromY: move.from.y,
-                // FIXED: Changed from move.from.x to move.to.x
                 toX: move.to.x,
                 toY: move.to.y,
                 piece: move.piece,
@@ -203,7 +232,7 @@ export class DatabaseQueue {
             }
         });
 
-        console.log('move created in database');
+        console.log('Move created in database');
 
         const currentTurn = await prisma.game.findUnique({
             where: { id: data.gameId },
@@ -238,7 +267,6 @@ export class DatabaseQueue {
         }
     }
 
-    // FIXED: Changed parameter type from GameState to status only
     private async handleGameUpdate(data: { gameId: string, status: GameStatusEnum }): Promise<void> {
         await prisma.game.update({
             where: { id: data.gameId },
@@ -249,20 +277,21 @@ export class DatabaseQueue {
         });
     }
 
-    // FIXED: Parameter type changed from object to string
     private async handleGameDeletion(gameId: string): Promise<void> {
         await prisma.game.delete({
             where: { id: gameId }
         });
     }
 
-    private mapGameStatusToDb(status: GameStatusEnum): any {
-        const statusMap: any = {
+    private mapGameStatusToDb(status: GameStatusEnum): 'WAITING' | 'ACTIVE' | 'CHECK' | 'CHECKMATE' | 'STALEMATE' | 'DRAW' | 'ABANDONED' {
+        const statusMap: Record<GameStatusEnum, 'WAITING' | 'ACTIVE' | 'CHECK' | 'CHECKMATE' | 'STALEMATE' | 'DRAW' | 'ABANDONED'> = {
             [GameStatusEnum.WAITING]: 'WAITING',
             [GameStatusEnum.ACTIVE]: 'ACTIVE',
             [GameStatusEnum.CHECK]: 'CHECK',
             [GameStatusEnum.CHECKMATE]: 'CHECKMATE',
-            [GameStatusEnum.STALEMATE]: 'STALEMATE'
+            [GameStatusEnum.STALEMATE]: 'STALEMATE',
+            [GameStatusEnum.DRAW]: 'DRAW',
+            [GameStatusEnum.ABANDONED]: 'ABANDONED'
         };
 
         return statusMap[status] || 'ACTIVE';
@@ -277,21 +306,31 @@ export class DatabaseQueue {
             }
         });
 
-        if (!game || !game.whitePlayer || !game.blackPlayer) {
+        if (!game) {
+            return;
+        }
+
+        const whiteIsGuest = game.whiteGuestId !== null;
+        const blackIsGuest = game.blackGuestId !== null;
+
+        if (whiteIsGuest || blackIsGuest) {
+            console.log('Skipping rating update - at least one player is a guest');
+            return;
+        }
+
+        if (!game.whitePlayer || !game.blackPlayer) {
             return;
         }
 
         const whiteRating = game.whitePlayer.rating;
         const blackRating = game.blackPlayer.rating;
 
-        // simple ELO calculation
         const { whiteNewRating, blackNewRating } = this.calculateEloRatings(
             whiteRating,
             blackRating,
             winner
         );
 
-        // update both players ratings
         await Promise.all([
             prisma.user.update({
                 where: { id: game.whitePlayerId! },
@@ -305,7 +344,7 @@ export class DatabaseQueue {
                     rating: blackNewRating,
                 }
             }),
-        ])
+        ]);
     }
 
     private calculateEloRatings(whiteRating: number, blackRating: number, winner: Color): { whiteNewRating: number; blackNewRating: number } {
@@ -348,6 +387,37 @@ export class DatabaseQueue {
 
     private generateId(): string {
         return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    public async cleanupGuestGames(olderThanHours: number = 24): Promise<void> {
+        const cutoffDate = new Date();
+        cutoffDate.setHours(cutoffDate.getHours() - olderThanHours);
+
+        try {
+            await prisma.game.deleteMany({
+                where: {
+                    AND: [
+                        {
+                            createdAt: { lt: cutoffDate }
+                        },
+                        {
+                            OR: [
+                                {
+                                    whiteGuestId: { not: null }
+                                },
+                                {
+                                    blackGuestId: { not: null }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            });
+
+            console.log('cleanded up old guest games');
+        } catch (error) {
+            console.error('Error cleaning up guest games:', error);
+        }
     }
 
     public getQueueLength(): number {

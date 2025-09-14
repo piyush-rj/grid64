@@ -1,5 +1,5 @@
 import { cn } from "@/src/lib/utils";
-import { Roboto } from 'next/font/google';
+import { Roboto } from "next/font/google";
 import NavbarSignin from "./common/NavbarSignIn";
 
 const roboto = Roboto({
@@ -9,18 +9,23 @@ const roboto = Roboto({
 
 export default function MainNavbar() {
     return (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-full max-w-7xl px-4 py-4 rounded-2xl shadow-lg z-30 bg-neutral-950/50 border border-neutral-800">
-            <div className={cn(
-                'px-4 flex items-center justify-between w-full tracking-wider font-extralight text-[22px]',
-                roboto.className
-            )}>
-                <span className="font-extralight text-[22px]">Grid<span className="text-[#9998d3] font-medium">64</span></span>
+        <div
+            className=" absolute top-4 left-0 right-0 mx-2 md:left-1/2 md:-translate-x-1/2 md:mx-0 w-auto md:w-full md:max-w-7xl py-2 md:px-4 md:py-4 rounded-xl md:rounded-2xl shadow-lg z-30 bg-neutral-950/50 border border-neutral-800"
+        >
+            <div
+                className={cn(
+                    "px-4 flex items-center justify-between w-full tracking-wider font-extralight text-[22px]",
+                    roboto.className
+                )}
+            >
+                <span className="font-extralight text-[18px] md:text-[22px]">
+                    Grid<span className="text-[#9998d3] font-medium">64</span>
+                </span>
 
                 <div className="flex justify-center items-center gap-x-2">
                     <NavbarSignin />
                 </div>
-
             </div>
         </div>
-    )
+    );
 }

@@ -20,6 +20,7 @@ export class ChessWebSocketServer {
     private wss: WebSocket.Server;
     private clients: Map<string, AuthenticatedWebSocket> = new Map(); // playerId, socket
     private gameClients: Map<string, Set<string>> = new Map(); // gameId, Set<playerId>
+    private guestPlayers: Set<string> = new Set();
 
     constructor(
         server: httpserver,
@@ -46,6 +47,7 @@ export class ChessWebSocketServer {
                 ws.isAlive = false;
                 ws.ping();
             });
+            this.cleanUpGuestPlayers();
         }, 30000);
 
         this.wss.on('close', () => {
@@ -75,6 +77,10 @@ export class ChessWebSocketServer {
         ws.playerId = playerId;
         ws.isAlive = true;
         this.clients.set(playerId, ws);
+
+        if (playerId.startsWith('guest_')) {
+            this.guestPlayers.add(playerId);
+        }
 
         ws.on('message', (data) => this.handleMessage(ws, data));
         ws.on('pong', () => { ws.isAlive = true; });
@@ -286,7 +292,6 @@ export class ChessWebSocketServer {
         }
     }
 
-
     private async handleChatMessage(ws: AuthenticatedWebSocket, message: string): Promise<void> {
         if (!ws.gameId) {
             this.sendError(ws, 'Not in a game');
@@ -327,6 +332,14 @@ export class ChessWebSocketServer {
         if (!ws.playerId) return;
 
         this.clients.delete(ws.playerId);
+
+        if (ws.playerId.startsWith('guest_')){
+            this.guestPlayers.delete(ws.playerId);
+
+            if (ws.gameId) {
+                this.gameManager.removePlayerFromGame(ws.gameId, ws.playerId);
+            }
+        }
 
         if (ws.gameId) {
             this.removeClientFromGame(ws.gameId, ws.playerId);
@@ -410,5 +423,21 @@ export class ChessWebSocketServer {
     public async shutdown(): Promise<void> {
         this.wss.close();
         await this.gameManager.cleanup();
+    }
+
+    private isGuestPlayer(playerId: string) {
+        return playerId.startsWith('guest_');
+    }
+
+    public async cleanUpGuestPlayers(): Promise<void> {
+        for (const guestPlayerId of this.guestPlayers) {
+            const client = this.clients.get(guestPlayerId);
+            if (!client || client.readyState !== WebSocket.OPEN) {
+                this.guestPlayers.delete(guestPlayerId);
+
+                await this.redisCache.deletePlayerGame(guestPlayerId);
+                await this.redisCache.deletePlayerSession(guestPlayerId);
+            }
+        }
     }
 }

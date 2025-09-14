@@ -112,50 +112,101 @@ export const CapturedPieces: React.FC = () => {
     const materialDiff = calculateMaterialDifference();
 
     return (
-        <div className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-4 space-y-4">
-            <h3 className="text-lg font-semibold text-center">Captured Pieces</h3>
+        <>
+            <div className="block md:hidden w-screen px-6">
+                <div className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-4 space-y-4">
+                    <h3 className="text-lg font-semibold text-center">Captured Pieces</h3>
 
-            <div className="space-y-2">
-                <h4 className="text-sm font-medium text-neutral-300">Black Pieces Captured</h4>
-                <div className="flex flex-wrap gap-1 min-h-[30px] bg-neutral-400 rounded p-2">
-                    {blackCaptured.map((captured, index) => (
-                        <CapturedPiece
-                            key={index}
-                            piece={captured.piece}
-                            color="BLACK"
-                        />
-                    ))}
-                    {blackCaptured.length === 0 && (
-                        <p className="text-xs text-gray-500">None</p>
+                    <div className="space-y-2">
+                        <h4 className="text-sm font-medium text-neutral-300">Black Pieces Captured</h4>
+                        <div className="flex flex-wrap gap-1 min-h-[30px] bg-neutral-400 rounded p-2">
+                            {blackCaptured.map((captured, index) => (
+                                <CapturedPiece
+                                    key={index}
+                                    piece={captured.piece}
+                                    color="BLACK"
+                                />
+                            ))}
+                            {blackCaptured.length === 0 && (
+                                <p className="text-xs text-gray-500">None</p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <h4 className="text-sm font-medium text-neutral-300">White Pieces Captured</h4>
+                        <div className="flex flex-wrap gap-1 min-h-[30px] bg-neutral-800 rounded p-2">
+                            {whiteCaptured.map((captured, index) => (
+                                <CapturedPiece
+                                    key={index}
+                                    piece={captured.piece}
+                                    color="WHITE"
+                                />
+                            ))}
+                            {whiteCaptured.length === 0 && (
+                                <p className="text-xs text-gray-500">None</p>
+                            )}
+                        </div>
+                    </div>
+
+                    {materialDiff !== 0 && (
+                        <div className="text-center">
+                            <p className="text-sm">
+                                <span className={`font-semibold ${materialDiff > 0 ? 'text-gray-800' : 'text-gray-600'}`}>
+                                    {materialDiff > 0 ? 'Black' : 'White'} +{Math.abs(materialDiff)}
+                                </span>
+                            </p>
+                        </div>
                     )}
                 </div>
             </div>
 
-            <div className="space-y-2">
-                <h4 className="text-sm font-medium text-neutral-300">White Pieces Captured</h4>
-                <div className="flex flex-wrap gap-1 min-h-[30px] bg-neutral-800 rounded p-2">
-                    {whiteCaptured.map((captured, index) => (
-                        <CapturedPiece
-                            key={index}
-                            piece={captured.piece}
-                            color="WHITE"
-                        />
-                    ))}
-                    {whiteCaptured.length === 0 && (
-                        <p className="text-xs text-gray-500">None</p>
-                    )}
-                </div>
-            </div>
+            <div className="hidden md:block w-full bg-neutral-900 border border-neutral-700 rounded-lg p-4 space-y-4">
+                <h3 className="text-lg font-semibold text-center">Captured Pieces</h3>
 
-            {materialDiff !== 0 && (
-                <div className="text-center">
-                    <p className="text-sm">
-                        <span className={`font-semibold ${materialDiff > 0 ? 'text-gray-800' : 'text-gray-600'}`}>
-                            {materialDiff > 0 ? 'Black' : 'White'} +{Math.abs(materialDiff)}
-                        </span>
-                    </p>
+                <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-neutral-300">Black Pieces Captured</h4>
+                    <div className="flex flex-wrap gap-1 min-h-[30px] bg-neutral-400 rounded p-2">
+                        {blackCaptured.map((captured, index) => (
+                            <CapturedPiece
+                                key={index}
+                                piece={captured.piece}
+                                color="BLACK"
+                            />
+                        ))}
+                        {blackCaptured.length === 0 && (
+                            <p className="text-xs text-gray-500">None</p>
+                        )}
+                    </div>
                 </div>
-            )}
-        </div>
+
+                <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-neutral-300">White Pieces Captured</h4>
+                    <div className="flex flex-wrap gap-1 min-h-[30px] bg-neutral-800 rounded p-2">
+                        {whiteCaptured.map((captured, index) => (
+                            <CapturedPiece
+                                key={index}
+                                piece={captured.piece}
+                                color="WHITE"
+                            />
+                        ))}
+                        {whiteCaptured.length === 0 && (
+                            <p className="text-xs text-gray-500">None</p>
+                        )}
+                    </div>
+                </div>
+
+                {materialDiff !== 0 && (
+                    <div className="text-center">
+                        <p className="text-sm">
+                            <span className={`font-semibold ${materialDiff > 0 ? 'text-gray-800' : 'text-gray-600'}`}>
+                                {materialDiff > 0 ? 'Black' : 'White'} +{Math.abs(materialDiff)}
+                            </span>
+                        </p>
+                    </div>
+                )}
+            </div>
+        </>
+
     );
 };

@@ -137,7 +137,7 @@ type IncomingWebSocketMessage =
     | ChatMessageReceived
     | ErrorMessage;
 
-// Outgoing message types (to backend)
+// outgoing message types (to backend)
 interface CreateGameMessage extends BaseWebSocketMessage {
     type: WebSocketMessageType.CREATE_GAME;
     data?: {
@@ -185,7 +185,6 @@ interface ChatMessageSend extends BaseWebSocketMessage {
     };
 }
 
-// Union type for all outgoing messages
 type OutgoingWebSocketMessage =
     | CreateGameMessage
     | JoinGameMessage
@@ -212,6 +211,21 @@ interface WebSocketProviderProps {
     wsUrl?: string;
 }
 
+const generatePlayerId = (): string => {
+    return `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
+const getOrCreateGuestPlayerId = (): string => {
+    const existingId = sessionStorage?.getItem('guestPlayerId');
+    if (existingId) {
+        return existingId;
+    }
+
+    const newId = generatePlayerId();
+    sessionStorage?.setItem('guestPlayerId', newId);
+    return newId;
+}
+
 export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
     children,
     wsUrl = "ws://localhost:8080",
@@ -222,7 +236,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
     const maxReconnectAttempts = 5;
 
     const { session } = useUserSessionStore();
-    const playerId = session?.user?.id;
+    const playerId = session?.user?.id || getOrCreateGuestPlayerId()    ;
 
     const {
         setConnected,
@@ -366,7 +380,6 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
                 break;
 
             default:
-                // TypeScript will ensure this is never reached if all cases are handled
                 console.log("Unhandled message type:", (message as IncomingWebSocketMessage).type);
         }
     };
@@ -397,9 +410,9 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [playerId]);
 
-    if (!session) {
-        return <>{children}</>;
-    }
+    // if (!session) {
+    //     return <>{children}</>;
+    // }
 
     return (
         <WebSocketContext.Provider value={{ ws: wsRef.current, sendMessage }}>

@@ -146,7 +146,7 @@ const PieceComponent: React.FC<{ piece: SerializedPiece }> = ({ piece }) => {
     return (
         <div
             className={`
-        w-10 h-10 flex items-center justify-center
+        md:w-10 md:h-10 w-8 h-8 flex items-center justify-center
         ${piece?.color === "WHITE"
                     ? "text-neutral-950 fill-neutral-300 drop-shadow-xl size-10"
                     : "text-[#bdbdbd] fill-black size-10 drop-shadow-xl"
@@ -176,7 +176,7 @@ const ChessSquare: React.FC<{
         return (
             <div
                 className={`
-        w-18 h-18 flex items-center justify-center cursor-pointer relative
+        md:w-18 md:h-18 h-10 w-10 flex items-center justify-center cursor-pointer relative
         ${isLight ? 'bg-[#232E3B]' : 'bg-[#3a5f76]'}
         ${isSelected ? 'ring-2 ring-[#aaa9e0] ring-inset' : ''}
         ${isValidMove ? 'ring-2 ring-[#7675BE] ring-inset' : ''}
@@ -193,6 +193,9 @@ const ChessSquare: React.FC<{
         );
     };
 
+
+
+
 export const ChessBoard: React.FC = () => {
     const { gameState, playerColor, selectSquare, isSquareSelected, isValidMoveSquare } =
         useChessSocket();
@@ -201,10 +204,19 @@ export const ChessBoard: React.FC = () => {
 
     if (!gameState) {
         return (
-            <div className="w-100 h-100 bg-neutral-900 border border-neutral-700 flex items-center justify-center rounded-lg">
-                <p className="text-neutral-300">Create OR Join a game</p>
-            </div>
+            <>
+                <div className="block md:hidden w-screen px-8">
+                    <div className="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 flex items-center justify-center rounded-lg">
+                        <p className="text-neutral-300">Create OR Join a game</p>
+                    </div>
+                </div>
+
+                <div className="hidden md:flex md:w-100 md:h-100 px-3 py-2 bg-neutral-900 border border-neutral-700 items-center justify-center rounded-lg">
+                    <p className="text-neutral-300">Create OR Join a game</p>
+                </div>
+            </>
         );
+
     }
 
     const boardToRender =
@@ -258,72 +270,119 @@ export const ChessBoard: React.FC = () => {
     })();
 
     return (
-        <div className="flex flex-col items-center relative">
-            <div
-                className={`
-          relative grid grid-cols-8 gap-0 border-2 border-neutral-700 rounded-lg overflow-hidden
-          ${gameState.gameStatus === "CHECKMATE" && showOverlay
-                        ? "blur-sm"
-                        : ""
-                    }
-        `}
-            >
-                {boardToRender.map((row, rowIndex) =>
-                    row.map((piece, colIndex) => {
-                        const actualPosition = getActualPosition(rowIndex, colIndex);
-                        const isLight = (rowIndex + colIndex) % 2 === 0;
-                        const isSelected = isSquareSelected(actualPosition);
-                        const isValidMove = isValidMoveSquare(actualPosition);
+        <>
+            <div className="md:hidden w-screen flex flex-col items-center relative">
+                <div
+                    className={`
+        relative grid grid-cols-8 gap-0 border-2 border-neutral-700 rounded-lg overflow-hidden
+        ${gameState.gameStatus === "CHECKMATE" && showOverlay ? "blur-sm" : ""}
+      `}
+                >
+                    {boardToRender.map((row, rowIndex) =>
+                        row.map((piece, colIndex) => {
+                            const actualPosition = getActualPosition(rowIndex, colIndex);
+                            const isLight = (rowIndex + colIndex) % 2 === 0;
+                            const isSelected = isSquareSelected(actualPosition);
+                            const isValidMove = isValidMoveSquare(actualPosition);
 
-                        const isKingInCheck =
-                            kingInCheckPosition &&
-                            kingInCheckPosition.x === actualPosition.x &&
-                            kingInCheckPosition.y === actualPosition.y;
+                            const isKingInCheck =
+                                kingInCheckPosition &&
+                                kingInCheckPosition.x === actualPosition.x &&
+                                kingInCheckPosition.y === actualPosition.y;
 
-                        return (
-                            <ChessSquare
-                                key={`${rowIndex}-${colIndex}`}
-                                piece={piece}
-                                isLight={isLight}
-                                isSelected={!!isSelected}
-                                isValidMove={isValidMove}
-                                isKingInCheck={!!isKingInCheck}
-                                onClick={() => selectSquare(actualPosition)}
-                            />
-                        );
-                    })
+                            return (
+                                <ChessSquare
+                                    key={`${rowIndex}-${colIndex}`}
+                                    piece={piece}
+                                    isLight={isLight}
+                                    isSelected={!!isSelected}
+                                    isValidMove={isValidMove}
+                                    isKingInCheck={!!isKingInCheck}
+                                    onClick={() => selectSquare(actualPosition)}
+                                />
+                            );
+                        })
+                    )}
+                </div>
+
+                {gameState.gameStatus === "CHECKMATE" && showOverlay && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                        <p className="text-2xl font-bold text-white mb-4 bg-black/70 px-6 py-3 rounded-lg">
+                            {getGameStatus()}
+                        </p>
+                        <button
+                            className="px-4 py-2 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600"
+                            onClick={() => setShowOverlay(false)}
+                        >
+                            Back
+                        </button>
+                    </div>
                 )}
             </div>
 
-            {gameState.gameStatus === "CHECKMATE" && showOverlay && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                    <p className="text-2xl font-bold text-white mb-4 bg-black/70 px-6 py-3 rounded-lg">
-                        {getGameStatus()}
-                    </p>
-                    <button
-                        className="px-4 py-2 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600"
-                        onClick={() => {
-                            setShowOverlay(false);
-                        }}
-                    >
-                        Back
-                    </button>
-                </div>
-            )}
 
-            <div className="mt-4 text-center flex space-x-6 tracking-wide">
-                <p className="text-sm text-neutral-400">
-                    Playing as:{" "}
-                    <span className="font-semibold">{playerColor || "Observer"}</span>
-                </p>
-                <p className="text-sm text-neutral-400">
-                    Current turn:{" "}
-                    <span className="font-semibold">{gameState.currentPlayer}</span>
-                </p>
-                <p className="text-sm text-neutral-400">
-                    Status: <span className="font-semibold">{getGameStatus()}</span>
-                </p>
+            {/* desktop viewport */}
+            <div className="hidden md:flex flex-col items-center relative">
+                <div
+                    className={`
+        relative grid grid-cols-8 gap-0 border-2 border-neutral-700 rounded-lg overflow-hidden
+        ${gameState.gameStatus === "CHECKMATE" && showOverlay ? "blur-sm" : ""}
+      `}
+                >
+                    {boardToRender.map((row, rowIndex) =>
+                        row.map((piece, colIndex) => {
+                            const actualPosition = getActualPosition(rowIndex, colIndex);
+                            const isLight = (rowIndex + colIndex) % 2 === 0;
+                            const isSelected = isSquareSelected(actualPosition);
+                            const isValidMove = isValidMoveSquare(actualPosition);
+
+                            const isKingInCheck =
+                                kingInCheckPosition &&
+                                kingInCheckPosition.x === actualPosition.x &&
+                                kingInCheckPosition.y === actualPosition.y;
+
+                            return (
+                                <ChessSquare
+                                    key={`${rowIndex}-${colIndex}`}
+                                    piece={piece}
+                                    isLight={isLight}
+                                    isSelected={!!isSelected}
+                                    isValidMove={isValidMove}
+                                    isKingInCheck={!!isKingInCheck}
+                                    onClick={() => selectSquare(actualPosition)}
+                                />
+                            );
+                        })
+                    )}
+                </div>
+
+                {gameState.gameStatus === "CHECKMATE" && showOverlay && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                        <p className="text-2xl font-bold text-white mb-4 bg-black/70 px-6 py-3 rounded-lg">
+                            {getGameStatus()}
+                        </p>
+                        <button
+                            className="px-4 py-2 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600"
+                            onClick={() => setShowOverlay(false)}
+                        >
+                            Back
+                        </button>
+                    </div>
+                )}
+
+                <div className="hidden md:block mt-4 text-center space-x-6 tracking-wide">
+                    <p className="text-sm text-neutral-400">
+                        Playing as: <span className="font-semibold">{playerColor || "Observer"}</span>
+                    </p>
+                    <p className="text-sm text-neutral-400">
+                        Current turn: <span className="font-semibold">{gameState.currentPlayer}</span>
+                    </p>
+                    <p className="text-sm text-neutral-400">
+                        Status: <span className="font-semibold">{getGameStatus()}</span>
+                    </p>
+                </div>
             </div>
-        </div>
+        </>
+
     );
 };
